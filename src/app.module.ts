@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
-// import { CacheModule } from '@nestjs/cache-manager';
 import { stellarConfig } from './config/stellar.config';
 import { databaseConfig, redisConfig } from './config/database.config';
 import { connectionPoolConfig } from './database/config/connection-pool.config';
@@ -17,10 +16,9 @@ import { StellarConfigService } from './config/stellar.service';
 
 import { LoggerModule } from './common/logger';
 import { SentryModule } from './common/sentry';
+import { ErrorClassificationModule } from './common/error-classification/error-classification.module';
 import { CacheModule } from './cache/cache.module';
 import { AuthModule } from './auth/auth.module';
- feature/sep24-fiat-on-off-ramp
-
 import { AnalyticsModule } from './analytics/analytics.module';
 import { WebsocketModule } from './websocket/websocket.module';
 import { ApiMonetizationModule } from './api-monetization/api-monetization.module';
@@ -111,6 +109,7 @@ import { MonitoringModule } from './monitoring/monitoring.module';
 
     LoggerModule,
     SentryModule,
+    ErrorClassificationModule,
     UsersModule,
     SignalsModule,
     TradesModule,
