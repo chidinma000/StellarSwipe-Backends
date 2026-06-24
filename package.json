@@ -27,7 +27,9 @@
     "migration:show": "npm run typeorm -- migration:show",
     "migration:ci": "npm run migration:run && npm run seed",
     "seed": "ts-node -r tsconfig-paths/register src/database/seeds/seed.ts",
-    "admin": "node bin/stellar-admin"
+    "admin": "node bin/stellar-admin",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "changelog:init": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 --release-count 0"
   },
   "bin": {
     "stellar-admin": "bin/stellar-admin"
@@ -120,6 +122,7 @@
     "@types/speakeasy": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
+    "conventional-changelog-cli": "^5.0.0",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.0.1",
