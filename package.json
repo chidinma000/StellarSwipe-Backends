@@ -25,7 +25,10 @@
     "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert",
     "migration:show": "npm run typeorm -- migration:show",
-    "admin": "node bin/stellar-admin"
+    "admin": "node bin/stellar-admin",
+    "export:openapi": "ts-node -r tsconfig-paths/register scripts/generate-openapi.ts",
+    "sdk:generate-types": "bash scripts/generate-sdk-types.sh",
+    "sdk:check-drift": "bash scripts/check-sdk-drift.sh"
   },
   "bin": {
     "stellar-admin": "bin/stellar-admin"
