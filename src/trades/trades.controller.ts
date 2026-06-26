@@ -12,9 +12,15 @@ import {
   UseInterceptors,
   Request,
 } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { IdempotencyInterceptor } from '../common/interceptors/idempotency.interceptor';
 import { RateLimit, RateLimitTier } from '../common/decorators/rate-limit.decorator';
+import {
+  ExecuteTradeCommand,
+  CancelTradeCommand,
+  GetTradeStatusQuery,
+} from './cqrs';
 import { TradesService } from './trades.service';
 import { TradeOutcomeService } from './trade-outcome.service';
 import { TradeOutcomeQueryDto } from './dto/trade-outcome-query.dto';
@@ -41,6 +47,8 @@ export class TradesController {
     private readonly riskManager: RiskManagerService,
     private readonly partialCloseService: PartialCloseService,
     private readonly tradeOutcomeService: TradeOutcomeService,
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
   ) { }
 
   /**
@@ -51,7 +59,7 @@ export class TradesController {
   @HttpCode(HttpStatus.CREATED)
   @RateLimit({ tier: RateLimitTier.TRADE })
   async executeTrade(@Body() dto: ExecuteTradeDto): Promise<TradeResultDto> {
-    return this.tradesService.executeTrade(dto);
+    return this.commandBus.execute(new ExecuteTradeCommand(dto));
   }
 
   /**
@@ -73,7 +81,7 @@ export class TradesController {
   @HttpCode(HttpStatus.OK)
   @RateLimit({ tier: RateLimitTier.TRADE })
   async closeTrade(@Body() dto: CloseTradeDto): Promise<CloseTradeResultDto> {
-    return this.tradesService.closeTrade(dto);
+    return this.commandBus.execute(new CancelTradeCommand(dto));
   }
 
   /**
@@ -96,7 +104,7 @@ export class TradesController {
     @Param('tradeId', ParseUUIDPipe) tradeId: string,
     @Query('userId', ParseUUIDPipe) userId: string,
   ): Promise<TradeDetailsDto> {
-    return this.tradesService.getTradeById(tradeId, userId);
+    return this.queryBus.execute(new GetTradeStatusQuery(tradeId, userId));
   }
 
   /**
